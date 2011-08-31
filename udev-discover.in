@@ -49,7 +49,7 @@ ICON_SUBSYS_COL, NAME_SUBSYS_COL = range(2)
 
 # Load icons
 theme = Gtk.IconTheme.get_default()
-device_icon = theme.load_icon('gtk-dialog-question', 24, 0)
+device_icon = theme.load_icon('dialog-question', 24, 0)
 
 class SubsystemChoserDialog(GConfStore):
     defaults = {
@@ -210,7 +210,7 @@ class UDevDiscoverGUI(GConfStore):
             'follownew': True,
             'followchanged': True,
             'subsystem_preset': DEFAULT_SUBSYS_PRESET,
-            'custom_subsystem_preset': DEFAULT_SUBSYSTEMS
+            'custom_subsystem_preset': ' '.join(DEFAULT_SUBSYSTEMS)
     }
 
     def __init__(self):
@@ -458,10 +458,10 @@ class UDevDiscoverGUI(GConfStore):
             device = self.device_finder.get_devices_tree()[row[PATH_COL]]
 
             title = '<b>'+device.nice_label+'</b>'
-            if hasattr(device, 'vendor_name'):
-                title += '\n<i>%s</i>' % device.vendor_name
-            if hasattr(device, 'model_name'):
-                title += '\n<i>%s</i>' % device.model_name
+            if hasattr(device, 'vendor_name') and device.vendor_name:
+                title += '\n<i>%s</i>' % device.vendor_name.decode('UTF-8')
+            if hasattr(device, 'model_name') and device.model_name:
+                title += '\n<i>%s</i>' % device.model_name.decode('UTF-8')
             self.devicename_label.set_label(title)
 
             desc = '\n'.join([': '.join(('<b>'+key.capitalize()+'</b>', 
